@@ -3,9 +3,6 @@ from PIL import Image
 import torch
 import torch.nn as nn
 from torchvision import models, transforms
-import cv2
-import numpy as np
-import tempfile
 
 # Load model
 model = models.mobilenet_v2(weights=None)
@@ -27,7 +24,7 @@ st.title("🖐️ Hand Gesture Recognition App")
 
 option = st.selectbox(
     "Choose input type:",
-    ("Take a live photo", "Upload an image", "Upload a video")
+    ("Take a live photo", "Upload an image")
 )
 
 def predict(image):
@@ -54,26 +51,3 @@ elif option == "Upload an image":
         prediction = predict(image)
         st.image(image, caption="Uploaded Image", use_column_width=True)
         st.success(f"Prediction: **{prediction}**")
-
-# 3. Upload a Video
-elif option == "Upload a video":
-    video_file = st.file_uploader("Upload a video file", type=["mp4", "avi", "mov"])
-    if video_file is not None:
-        tfile = tempfile.NamedTemporaryFile(delete=False)
-        tfile.write(video_file.read())
-        
-        cap = cv2.VideoCapture(tfile.name)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        target_frame = total_frames // 2  # Pick the middle frame
-        cap.set(cv2.CAP_PROP_POS_FRAMES, target_frame)
-        ret, frame = cap.read()
-        cap.release()
-
-        if ret:
-            frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            image = Image.fromarray(frame_rgb)
-            prediction = predict(image)
-            st.image(image, caption="Frame from Uploaded Video", use_column_width=True)
-            st.success(f"Prediction from frame {target_frame}: **{prediction}**")
-        else:
-            st.error("Could not extract frame from the video.")
