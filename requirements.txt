@@ -2,4 +2,4 @@ streamlit
 torch
 torchvision
 opencv-python
-pillow
+Pillow
