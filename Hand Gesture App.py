@@ -9,9 +9,8 @@ model.load_state_dict(torch.load("gesture_mobilenetv2.pth", map_location=torch.d
 model.eval()
 class_names = ['c', 'down', 'fist', 'fist_moved', 'index', 'l', 'ok', 'palm', 'palm_moved', 'thumb']
 transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    transforms.Resize((96, 96)),
+    transforms.ToTensor()
 ])
 st.title("🖐️ Hand Gesture Recognition App")
 option = st.selectbox(
